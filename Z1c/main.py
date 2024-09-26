@@ -6,8 +6,8 @@ import node
 
 inc = 0
 
-# graf = [myUtils.alocGraf()]
-graf = [node.Node(0,0), node.Node(3,0), node.Node(3,4)]
+graf = [myUtils.alocGraf()]
+# graf = [node.Node(0,0), node.Node(3,0), node.Node(3,4)]
 visited = [x for x in range(len(graf))]
 
 
