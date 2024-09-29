@@ -11,7 +11,7 @@ def alocGraf() -> list:
     # BUG: possible 
     #creating 20 points
     random
-    graf = [Node(random.randint(0, 200), random.randint(0, 200)) for _ in range(20)]
+    graf = [Node(random.randint(0, 20), random.randint(0, 20)) for _ in range(20)]
 
     return graf
 

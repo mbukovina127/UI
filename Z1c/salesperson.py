@@ -28,23 +28,22 @@ class Salesperson:
         return str(rStr)
 
     def breedPath(self, parent1: 'Salesperson', parent2: 'Salesperson'):
-        start = random.randint(0, len(parent1.path)-1)
-        end = (start + (len(parent1.path) -1) // 2) % len(parent1.path)
+        cut = random.randint(0, len(parent1.path)-1)
 
-        if start > end:
-            tmp = start
-            start = end
-            end = tmp
-
+        #copy first parent into the path
         combinedPath = [None] * len(parent1.path)
-        combinedPath[start:end] = parent1.path[start:end]
+        combinedPath[0:cut] = parent1.path[0:cut]
 
-        for i in range(len(parent2.path)):
-            if i in range(start,end):
+        #copy second parent into the path
+        for i in range(cut, len(parent2.path)):
+            if i in range(0,cut):
                 continue
             node = parent2.path[i]
-            while node in combinedPath[start:end]:
-                    node = parent2.path[parent1.path.index(node)]
+            #if node from p2 is in the path already because of p1
+            # look at the position where it is occupied
+            # use that index to find the cor. node from p2 repeat
+            while node in combinedPath[0:cut]:
+                node = parent2.path[parent1.path.index(node)]
             combinedPath[i] = node
 
         self.path = combinedPath

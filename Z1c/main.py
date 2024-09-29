@@ -17,7 +17,7 @@ for _ in range(20):
     sp = Salesperson(myUtils.permutated_path(graf, list(visited)))
     salespeople.append(sp)
 
-for x in range(100):
+for x in range(200):
     print(f"Gen: {x} -> best: {salespeople[0].distanceTraveled}")
     salespeople = gen.newGeneration(salespeople, 20)
     myUtils.visualize_path(salespeople[0].path)

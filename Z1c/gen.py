@@ -18,8 +18,8 @@ def newGeneration(old: list, number) -> list:
 
 
 def chooseParents(generation):
-    firstNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 3)]
-    secondNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 3)]
+    firstNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 5)]
+    secondNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 5)]
     firstNumber.sort()
     secondNumber.sort()
     pair = list([firstNumber[0]])
