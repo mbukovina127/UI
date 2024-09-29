@@ -11,7 +11,7 @@ def alocGraf() -> list:
     # BUG: possible 
     #creating 20 points
     random
-    graf = [Node(random.randint(0, 200), random.randint(0, 200)) for _ in range(20)]
+    graf = [Node(random.randint(0, 200), random.randint(0, 200)) for _ in range(40)]
 
     return graf
 
@@ -38,6 +38,6 @@ def visualize_path(path: list):
     edges.append([path[-1], path[0]])
     nx.draw(vis_graph, pos=pos, node_color='red', node_size=25)
     tags = {x: "Node " + str(path.index(x)) for x in path}
-    nx.draw_networkx_labels(vis_graph, pos=pos, labels=tags)
+    # nx.draw_networkx_labels(vis_graph, pos=pos, labels=tags)
     nx.draw_networkx_edges(vis_graph, pos=pos, edgelist=edges, edge_color='blue')
     plt.show()
