@@ -17,11 +17,14 @@ def newGeneration(old: list, number) -> list:
         
 
 
-def chooseParents(list):
-    firstNumber = [random.randint(0, len(list) -1) for _ in range(len(list)//2)]
-    secondNumber = [random.randint(0, len(list) -1) for _ in range(len(list)//2)]
+def chooseParents(generation):
+    firstNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 3)]
+    secondNumber = [random.randint(0, len(generation) - 1) for _ in range(len(generation) // 3)]
     firstNumber.sort()
     secondNumber.sort()
-
-    return [list[firstNumber[0]], list[secondNumber[0]]]
+    pair = list([firstNumber[0]])
+    for i in range(len(secondNumber)):
+        if secondNumber[i] != pair[0]:
+            pair.append(secondNumber[i])
+    return [generation[pair[0]], generation[pair[1]]]
 

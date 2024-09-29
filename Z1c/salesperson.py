@@ -36,27 +36,34 @@ class Salesperson:
             start = end
             end = tmp
 
-        combinedPath = parent1.path[:]
-        usedNodes = set(parent1.path[start:end])
-        for og in range(parent2.path.__len__()):
-            if og not in range(start, end):
-                for replace in range(parent2.path.__len__()):
-                    if parent2.path[replace] not in usedNodes:
-                        combinedPath[og] = parent2.path[replace]
-                        usedNodes.add(parent2.path[replace])
-                        break
+        combinedPath = [None] * len(parent1.path)
+        combinedPath[start:end] = parent1.path[start:end]
+
+        for i in range(len(parent2.path)):
+            if i in range(start,end):
+                continue
+            node = parent2.path[i]
+            while node in combinedPath[start:end]:
+                    node = parent2.path[parent1.path.index(node)]
+            combinedPath[i] = node
 
         self.path = combinedPath
         self.mutatePath()
     
     def mutatePath(self):
         #swap
-        if (random.randint(0,1) == 1):
+        if random.randint(0, 3) > 0:
             location = random.randint(0, len(self.path)-1)
             temp = self.path[location]
             self.path[location] = self.path[(location +1) % len(self.path)]
             self.path[(location +1) % len(self.path)] = temp
-        
+        if random.randint(0, 3) < 1:
+            location1 = random.randint(0, len(self.path)-1)
+            location2 = random.randint(0, len(self.path)-1)
+            temp = self.path[location1]
+            self.path[location1] = self.path[location2]
+            self.path[location2] = temp
+
         self.calcDistance()
 
 
