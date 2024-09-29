@@ -29,7 +29,7 @@ class Salesperson:
 
     def breedPath(self, parent1: 'Salesperson', parent2: 'Salesperson'):
         cut = random.randint(0, len(parent1.path)-1)
-
+        
         #copy first parent into the path
         combinedPath = [None] * len(parent1.path)
         combinedPath[0:cut] = parent1.path[0:cut]
@@ -56,7 +56,7 @@ class Salesperson:
             temp = self.path[location]
             self.path[location] = self.path[(location +1) % len(self.path)]
             self.path[(location +1) % len(self.path)] = temp
-        if random.randint(0, 3) < 1:
+        if random.randint(0, 7) < 1:
             location1 = random.randint(0, len(self.path)-1)
             location2 = random.randint(0, len(self.path)-1)
             temp = self.path[location1]
