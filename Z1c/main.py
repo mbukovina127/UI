@@ -17,10 +17,10 @@ for _ in range(50):
     sp = Salesperson(myUtils.permutated_path(graf, list(visited)))
     salespeople.append(sp)
 
-for x in range(300):
+for x in range(2500):
     print(f"Gen: {x} -> best: {salespeople[0].distanceTraveled}")
     salespeople = gen.newGeneration(salespeople, 100)
-    myUtils.visualize_path(salespeople[0].path)
+    if x % 25 == 0 : myUtils.visualize_path(salespeople[0].path)
 
 
 print(f"Gen: {x} -> best: {salespeople[0].distanceTraveled}")

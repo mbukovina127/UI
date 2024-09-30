@@ -82,7 +82,9 @@ def mutatePath(path: list):
     #reverse
     if random.randint(0, 9) < 3:
         start = random.randint(0, len(path) - 1)
-        end = (start + random.randint(0, len(path) -1 - start))
+        end = (start + random.randint(0, len(path) -1))
+        if start > end:
+            start,end = end,start
         for i in range(start, end // 2):
             keep = path[i]
             path[i] = path[end-i]
