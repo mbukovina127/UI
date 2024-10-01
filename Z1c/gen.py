@@ -66,28 +66,38 @@ def crossover(offspring: list, immutable: list, parent2: list, start, end) -> li
 def mutatePath(path: list):
     # neighbour swap
     if random.randint(0, 9) < 5:
-        location = random.randint(0, len(path) - 1)
-        temp = path[location]
-        path[location] = path[(location + 1) % len(path)]
-        path[(location + 1) % len(path)] = temp
+        neighbour_swap(path)
         if random.randint(0, 10) > 0:
             mutatePath(path)
     #random swap
     if random.randint(0, 9) < 3:
-        location1 = random.randint(0, len(path) - 1)
-        location2 = random.randint(0, len(path) - 1)
-        temp = path[location1]
-        path[location1] = path[location2]
-        path[location2] = temp
+        random_swap(path)
     #reverse
     if random.randint(0, 9) < 3:
-        start = random.randint(0, len(path) - 1)
-        end = (start + random.randint(0, len(path) -1))
-        if start > end:
-            start,end = end,start
-        for i in range(start, end // 2):
-            keep = path[i]
-            path[i] = path[end-i]
-            path[end-i] = keep
-
+        reverse_segment(path)
     return path
+
+def neighbour_swap(path):
+    location = random.randint(0, len(path) - 1)
+    temp = path[location]
+    path[location] = path[(location + 1) % len(path)]
+    path[(location + 1) % len(path)] = temp
+    return path
+
+def random_swap(path):
+    location1 = random.randint(0, len(path) - 1)
+    location2 = random.randint(0, len(path) - 1)
+    temp = path[location1]
+    path[location1] = path[location2]
+    path[location2] = temp
+    return path
+
+def reverse_segment(path):
+    start = random.randint(0, len(path) - 1)
+    end = (start + random.randint(0, len(path) - 1))
+    if start > end:
+        start, end = end, start
+    for i in range(start, end // 2):
+        keep = path[i]
+        path[i] = path[end - i]
+        path[end - i] = keep

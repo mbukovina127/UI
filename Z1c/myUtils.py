@@ -18,6 +18,15 @@ def alocGraf() -> list:
 def distance(one: Node , two: Node):
     return math.sqrt((one.x - two.x)**2 + (one.y - two.y)**2)
 
+def length_of_path(path: list):
+    previous = path[0]
+    lSize = len(path)
+    path_distance = 0
+    for index in range(lSize + 1):
+        next = path[index % lSize]
+        path_distance += distance(previous, next)
+        previous = next
+
 def permutated_path(graf: list, visited: list):
     path = []
     while len(visited):
@@ -40,3 +49,4 @@ def visualize_path(path: list):
     # nx.draw_networkx_labels(vis_graph, pos=pos, labels=tags)
     nx.draw_networkx_edges(vis_graph, pos=pos, edgelist=edges, edge_color='blue')
     plt.show()
+
