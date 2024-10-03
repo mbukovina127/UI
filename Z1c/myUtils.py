@@ -1,16 +1,23 @@
 import math
 import random
 from cProfile import label
+from math import floor
 
 from node import Node
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def alocGraf() -> list:
+def alocGraf(maxdist: int, num_of_nodes: int) -> list:
 
-    # BUG: possible 
-    #creating 20 points
-    graf = [Node(random.randint(0, 200), random.randint(0, 200)) for _ in range(100)]
+    graf = list()
+    # grid graf
+    # one_d: int = int(math.sqrt(num_of_nodes))
+    # factor: int = maxdist // one_d
+    # for i in range(one_d):
+    #     graf.extend([Node(random.randint(x*factor, x*factor+factor), random.randint(i*factor, i*factor+factor)) for x in range(one_d) ])
+
+    #classic random
+    graf = [Node(random.randint(0, maxdist), random.randint(0, maxdist)) for _ in range(num_of_nodes)]
 
     return graf
 
@@ -26,6 +33,7 @@ def length_of_path(path: list):
         next = path[index % lSize]
         path_distance += distance(previous, next)
         previous = next
+    return path_distance
 
 def permutated_path(graf: list, visited: list):
     path = []
@@ -36,7 +44,7 @@ def permutated_path(graf: list, visited: list):
 
     return path
 
-def visualize_path(path: list):
+async def visualize_path(path: list):
     vis_graph = nx.Graph()
     vis_graph.add_nodes_from(path)
     pos = dict()
