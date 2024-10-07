@@ -51,7 +51,7 @@ def breedPath(parent1: 'Salesperson', parent2: 'Salesperson') -> list :
     off1 = crossover(off1, parent1.path, parent2.path, start, end)
     off2 = crossover(off2, parent1.path, parent2.path, start, end)
 
-    return [mutatePath(off1), mutatePath(off2)]
+    return [mutate_path(off1), mutate_path(off2)]
 
 def crossover(offspring: list, immutable: list, parent2: list, start, end) -> list:
     for i in range(len(parent2)):
@@ -63,14 +63,14 @@ def crossover(offspring: list, immutable: list, parent2: list, start, end) -> li
         offspring[i] = node
     return offspring
 
-def mutatePath(path: list):
+def mutate_path(path: list):
     # neighbour swap
     if random.randint(0,9) < 6:
         move_city(path)
     if random.randint(0, 9) < 5:
         neighbour_swap(path)
         if random.randint(0, 10) > 0:
-            mutatePath(path)
+            mutate_path(path)
     #random swap
     if random.randint(0, 9) < 3:
         random_swap(path)

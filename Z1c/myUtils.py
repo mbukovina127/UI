@@ -6,6 +6,7 @@ from math import floor
 from node import Node
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
 
 def alocGraf(maxdist: int, num_of_nodes: int) -> list:
 
@@ -58,3 +59,33 @@ async def visualize_path(path: list):
     nx.draw_networkx_edges(vis_graph, pos=pos, edgelist=edges, edge_color='blue')
     plt.show()
 
+async def vis_performance(data: list):
+    vis_graph = nx.Graph()
+
+    # Add nodes with their indices
+    for i, (xcord, ycord) in enumerate(data):
+        vis_graph.add_node(i, pos=(xcord, ycord))
+
+    # Create edges between consecutive nodes
+    edges = list(zip(range(len(data) - 1), range(1, len(data))))
+    vis_graph.add_edges_from(edges)
+
+    # Get positions for nodes
+    pos = {i: (xcord, ycord) for i, (xcord, ycord) in enumerate(data)}
+
+    plt.xticks(np.arange(0, 200, 10))
+    plt.yticks(np.arange(0, 5000, 100))
+    plt.axis('on')
+
+    # Draw edges, ensure that pos is indexed by node indices
+    nx.draw_networkx_edges(vis_graph, pos=pos, edgelist=edges, edge_color='blue')
+
+    plt.show()
+
+async def vis_plot_performance(x: list, y: list, nazov: str):
+    plt.plot(x,y)
+    plt.xlabel("Generacie")
+    plt.ylabel("Dlžka cesty")
+    plt.title(nazov)
+    plt.xscale('log')
+    plt.show()
