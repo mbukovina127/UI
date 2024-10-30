@@ -4,6 +4,7 @@ import random
 
 from fontTools.misc.cython import returns
 from matplotlib.streamplot import OutOfBounds
+from numpy.ma.core import indices
 
 from Z2c.point import minDistance
 from Z2c.visuals import visualize, visualizeList
@@ -36,28 +37,19 @@ def clamp(value, minimum, maximum):
 
 def updateGrid(sub_grid, minheap: list):
     result = False
-    merged_clusters = set()
-    while True:
-        try:
-            p, pair = heapq.heappop(minheap)
-        except IndexError:
-            break
+    try:
+        p, pair = heapq.heappop(minheap)
+        new_c = Cluster.merge(pair[0], pair[1], LIMIT)
 
-        if (pair[0] in merged_clusters or pair[1] in merged_clusters): return result
-        merged_clusters.add(pair[0])
-        merged_clusters.add(pair[1])
+        sub_grid.remove(pair[0])
+        sub_grid.remove(pair[1])
+        sub_grid.append(new_c)
 
-        try:
-            new_c = Cluster.merge(pair[0], pair[1], LIMIT)
-
-            sub_grid.remove(pair[0])
-            sub_grid.remove(pair[1])
-            sub_grid.append(new_c)
-
-            result = True
-
-        except OutOfBounds:
-            break
+        result = True
+    except OutOfBounds:
+        return
+    except IndexError:
+        return
 
     return result
 
@@ -70,10 +62,10 @@ def updateTheFullGrid(GRID):
             allClusters.extend(squares)
 
     ### how the fuk do I stop this
+    finalClusters = []
     while True:
         print(".", end="")
         minheap = minDistance(allClusters)
-        merged_clusters = set()
         try:
             priority, pair = heapq.heappop(minheap)
             new_c = Cluster.merge(pair[0], pair[1], LIMIT)
@@ -81,33 +73,29 @@ def updateTheFullGrid(GRID):
             allClusters.remove(pair[1])
             allClusters.append(new_c)
 
-        except IndexError:
-            break
         except OutOfBounds:
-            break
+            finalClusters.append(pair[0])
+            finalClusters.append(pair[1])
+            allClusters.remove(pair[0])
+            allClusters.remove(pair[1])
+            continue
+        except IndexError:
+            return finalClusters
 
-        merged_clusters.add(pair[0])
-        merged_clusters.add(pair[1])
+def binaryReduce(ogsize: int, GRID):
+    print("binary reduction")
+    new_size = ogsize // 2
+    BiggerGrid = [[[] for _ in range(new_size)] for _ in range(new_size)]
+    for i in range(0, len(GRID) - 1, 2):
+        for j in range(0, len(GRID[i]) - 1, 2):
+            k, l = (i // 2, j // 2)
+            print(i,j,k,l)
+            BiggerGrid[k][l].extend(GRID[i][j])
+            BiggerGrid[k][l].extend(GRID[i][j + 1])
+            BiggerGrid[k][l].extend(GRID[i][j + 1])
+            BiggerGrid[k][l].extend(GRID[i + 1][j + 1])
 
-        while True:
-            try:
-                priority, pair = heapq.heappop(minheap)
-            except IndexError:
-                break
-
-            if (pair[0] in merged_clusters or pair[1] in merged_clusters): break
-            merged_clusters.add(pair[0])
-            merged_clusters.add(pair[1])
-
-            try:
-                new_c = Cluster.merge(pair[0], pair[1], LIMIT)
-
-                allClusters.remove(pair[0])
-                allClusters.remove(pair[1])
-                allClusters.append(new_c)
-            except OutOfBounds:
-                break
-    return allClusters
+    return BiggerGrid, new_size
 
 
 if __name__ == '__main__':
@@ -118,7 +106,7 @@ if __name__ == '__main__':
     max_points = 20000
     offset_min = -100
     offset_max = 100
-    compression = 100
+    compression = 10
     size = int((max - min)/compression)
 
 
@@ -133,13 +121,21 @@ if __name__ == '__main__':
     addToGrid(allClusters, GRID, min, max)
 
 
-    for rows in GRID:
-        for squares in rows:
-            while len(squares) > 3:
-                if not updateGrid(squares, minDistance(squares)):
-                    break
-                print(".", end="")
-        print("")
+    while True:
+        print("reducing clusters")
+        for rows in GRID:
+            for squares in rows:
+                while len(squares) > 5:
+                    if not updateGrid(squares, minDistance(squares)):
+                        break
+                    print(".", end="")
+            print("")
 
-    visualizeList(updateTheFullGrid(GRID))
-    # visualize(GRID)
+        ###binary reduction
+        if (size <= 4):
+            break
+        sum
+        GRID, size = binaryReduce(size, GRID)
+        GRID, size = binaryReduce(size, GRID)
+
+    visualize(GRID)
