@@ -42,7 +42,7 @@ class Cluster:
     ### Static methods
     ###
 
-    def checkCriterion(self, cl: 'Cluster', max):
+    def checkCriterion(self, cl: 'Cluster', max: int):
         for point in self.contents:
             if (pointDistance(point, cl.centroid) > max):
                 return False
@@ -57,4 +57,3 @@ class Cluster:
             raise OutOfBounds
 
         return new_c
-

@@ -31,7 +31,7 @@ def visualize(grid, TIME):
     plt.title(str(TIME))
     plt.show()
 
-def visualizeList(list_of_grid):
+def visualizeList(list_of_grid, centroids):
     x_axis = []
     y_axis = []
     centroids_x = []
@@ -51,7 +51,8 @@ def visualizeList(list_of_grid):
 
     color_map = {0: "red", 1: "green", 2: "blue", 3: "yellow", 4: "black"}
     c = [color_map[x] for x in color]
-    plt.scatter(x_axis, y_axis, color=c, s=.5)
-    plt.scatter(centroids_x, centroids_y, color="black", s=500, alpha=0.2)
+    plt.scatter(x_axis, y_axis, color=c, s=1, alpha=0.1)
+    if centroids:
+        plt.scatter(centroids_x, centroids_y, color="black", s=500, alpha=0.1)
     plt.show()
 
