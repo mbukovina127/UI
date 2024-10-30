@@ -1,15 +1,34 @@
-from point import Point, distance
+from matplotlib.streamplot import OutOfBounds
+
+from point import Point, pointDistance
 
 
 class Cluster:
-    def __init__(self, points: set):
-        self.contents = points
-        self.number_of_points = 0
+    def __init__(self, points):
+        self.contents = set()
         self.centroid = Point(0,0)
+        self.number_of_points = 0
 
+        if isinstance(points,set):
+            self.contents = points
+            self.calculateCentroid()
+
+        elif isinstance(points,Point):
+            self.contents.add(points)
+            self.centroid = points
+
+        else: raise TypeError
+
+        self.number_of_points = len(self.contents)
+
+    def __lt__(self, other):
+        if self.number_of_points < other.number_of_points:
+            return True
+        else: return False
 
     def calculateCentroid(self):
         sum = Point(0,0)
+        self.number_of_points = 0
         for point in self.contents:
             sum.x += point.x
             sum.y += point.y
@@ -17,19 +36,25 @@ class Cluster:
         x_average = sum.x / self.number_of_points
         y_average = sum.y / self.number_of_points
 
+        self.centroid.x = x_average
+        self.centroid.y = y_average
+
     ### Static methods
     ###
+
     def checkCriterion(self, cl: 'Cluster', max):
         for point in self.contents:
-            if (distance(point, cl.centroid) > max):
+            if (pointDistance(point, cl.centroid) > max):
                 return False
         return True
 
     def merge(cl1: 'Cluster', cl2: 'Cluster', limit: int):
-        new_c = Cluster(set(*cl1.contents, *cl2.contents))
-        if (not new_c.calculateCentroid()):
-            return False
+        new_set = cl1.contents | cl2.contents
+        new_c = Cluster(new_set)
+        new_c.calculateCentroid()
+
         if (not new_c.checkCriterion(new_c, limit)):
-            return False
+            raise OutOfBounds
 
         return new_c
+
