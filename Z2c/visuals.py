@@ -1,8 +1,10 @@
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 from cluster import Cluster
 
-def visualize(grid):
+def visualize(grid, TIME):
     x_axis = []
     y_axis = []
     centroids_x = []
@@ -25,7 +27,8 @@ def visualize(grid):
     color_map = {0: "red", 1: "green", 2: "blue", 3: "yellow", 4: "black"}
     c = [color_map[x] for x in color]
     plt.scatter(x_axis, y_axis, color=c, s=.5)
-    plt.scatter(centroids_x, centroids_y, color="black", s=500, alpha=0.2)
+    plt.scatter(centroids_x, centroids_y, color="black", s=500, alpha=0.1)
+    plt.title(str(TIME))
     plt.show()
 
 def visualizeList(list_of_grid):

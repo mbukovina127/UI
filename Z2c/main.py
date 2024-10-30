@@ -1,6 +1,7 @@
 import heapq
 import math
 import random
+import time
 
 from fontTools.misc.cython import returns
 from matplotlib.streamplot import OutOfBounds
@@ -82,18 +83,16 @@ def updateTheFullGrid(GRID):
         except IndexError:
             return finalClusters
 
-def binaryReduce(ogsize: int, GRID):
+def binaryReduce(ogsize: int, grid):
     print("binary reduction")
     new_size = ogsize // 2
+    if new_size % 2 == 1:
+        new_size += 1
     BiggerGrid = [[[] for _ in range(new_size)] for _ in range(new_size)]
-    for i in range(0, len(GRID) - 1, 2):
-        for j in range(0, len(GRID[i]) - 1, 2):
-            k, l = (i // 2, j // 2)
-            print(i,j,k,l)
-            BiggerGrid[k][l].extend(GRID[i][j])
-            BiggerGrid[k][l].extend(GRID[i][j + 1])
-            BiggerGrid[k][l].extend(GRID[i][j + 1])
-            BiggerGrid[k][l].extend(GRID[i + 1][j + 1])
+    for i in range(0, len(grid) - 1, 2):
+        for j in range(0, len(grid[i]) - 1, 2):
+            k, l = (int(i / 2), int(j / 2))
+            BiggerGrid[k][l].extend([*grid[i][j], *grid[i][j + 1], *grid[i + 1][j], *grid[i + 1][j + 1]])
 
     return BiggerGrid, new_size
 
@@ -120,22 +119,23 @@ if __name__ == '__main__':
 
     addToGrid(allClusters, GRID, min, max)
 
-
+    start = time.time()
     while True:
+
         print("reducing clusters")
         for rows in GRID:
             for squares in rows:
-                while len(squares) > 5:
+                while len(squares) //3:
                     if not updateGrid(squares, minDistance(squares)):
                         break
                     print(".", end="")
             print("")
 
         ###binary reduction
-        if (size <= 4):
+        visualize(GRID, (time.time() - start))
+        if (size <= 2):
+            visualize(GRID, (time.time() - start))
             break
-        sum
         GRID, size = binaryReduce(size, GRID)
         GRID, size = binaryReduce(size, GRID)
-
-    visualize(GRID)
+        #calculate_change
