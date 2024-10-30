@@ -49,7 +49,7 @@ def visualizeList(list_of_grid, centroids):
             y_axis.append(point.y)
             color.append(color_num % rotation)
 
-    color_map = {0: "red", 1: "green", 2: "blue", 3: "yellow", 4: "black"}
+    color_map = {0: "red", 1: "green", 2: "blue", 3: "magenta", 4: "black"}
     c = [color_map[x] for x in color]
     plt.scatter(x_axis, y_axis, color=c, s=1, alpha=0.1)
     if centroids:

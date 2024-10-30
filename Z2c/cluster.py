@@ -1,5 +1,3 @@
-from matplotlib.streamplot import OutOfBounds
-
 from point import Point, pointDistance
 
 
@@ -54,6 +52,6 @@ class Cluster:
         new_c.calculateCentroid()
 
         if (not new_c.checkCriterion(new_c, limit)):
-            raise OutOfBounds
+            return False
 
         return new_c
