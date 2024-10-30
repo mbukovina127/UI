@@ -41,47 +41,33 @@ def updateGrid(sub_grid, minheap: list):
     try:
         p, pair = heapq.heappop(minheap)
         new_c = Cluster.merge(pair[0], pair[1], LIMIT)
-
         sub_grid.remove(pair[0])
         sub_grid.remove(pair[1])
         sub_grid.append(new_c)
 
         result = True
     except OutOfBounds:
-        return
+        return result
     except IndexError:
-        return
+        return result
 
     return result
 
-def updateTheFullGrid(GRID):
-    print("Updating the full grid")
-    allClusters = []
-
-    for rows in GRID:
-        for squares in rows:
-            allClusters.extend(squares)
-
-    ### how the fuk do I stop this
-    finalClusters = []
+def finalCleanup(grid) :
     while True:
-        print(".", end="")
-        minheap = minDistance(allClusters)
-        try:
-            priority, pair = heapq.heappop(minheap)
-            new_c = Cluster.merge(pair[0], pair[1], LIMIT)
-            allClusters.remove(pair[0])
-            allClusters.remove(pair[1])
-            allClusters.append(new_c)
-
-        except OutOfBounds:
-            finalClusters.append(pair[0])
-            finalClusters.append(pair[1])
-            allClusters.remove(pair[0])
-            allClusters.remove(pair[1])
-            continue
-        except IndexError:
-            return finalClusters
+        minheap = minDistance(grid[0][0])
+        while True:
+            try:
+                p, pair = heapq.heappop(minheap)
+                new_c = Cluster.merge(pair[0], pair[1], LIMIT)
+                grid[0][0].remove(pair[0])
+                grid[0][0].remove(pair[1])
+                grid[0][0].append(new_c)
+                break
+            except OutOfBounds:
+                continue
+            except IndexError:
+                return
 
 def binaryReduce(ogsize: int, grid):
     print("binary reduction")
@@ -125,7 +111,7 @@ if __name__ == '__main__':
         print("reducing clusters")
         for rows in GRID:
             for squares in rows:
-                while len(squares) //3:
+                while len(squares) > 5:
                     if not updateGrid(squares, minDistance(squares)):
                         break
                     print(".", end="")
@@ -134,6 +120,7 @@ if __name__ == '__main__':
         ###binary reduction
         visualize(GRID, (time.time() - start))
         if (size <= 2):
+            finalCleanup(GRID)
             visualize(GRID, (time.time() - start))
             break
         GRID, size = binaryReduce(size, GRID)
