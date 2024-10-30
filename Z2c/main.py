@@ -1,6 +1,7 @@
 import random
 
 from matplotlib.streamplot import OutOfBounds
+from numpy.matrixlib.defmatrix import matrix
 
 from Z2c.point import clusterDistance
 from Z2c.visuals import visualizeList
@@ -18,62 +19,55 @@ def clamp(value, minimum, maximum):
 
 
 def makeMatrix(allClusters):
-    Matrix = [[0 for _ in range(len(allClusters))] for _ in range(len(allClusters))]
-    # min = 10000* math.sqrt(2)
-    # pair = (0,0)
+    size = len(allClusters)
+    matrix = np.zeros((size, size))
+    print(size)
     for i, st in enumerate(allClusters):
         for j, nd in enumerate(allClusters):
-            Matrix[i][j] = clusterDistance(st,nd)
-            # if Matrix[i][j] < min:
-            #     min = Matrix[i][j]
-            #     pair = (i,j)
-    return Matrix
+            matrix[i, j] = clusterDistance(st,nd)
+    return matrix
 
 
 def findMinDist(Matrix):
-    min = 12000
-    pair = (0,0)
-    for i in range(len(Matrix)):
-        for j in range (i+1, len(Matrix)):
-            if Matrix[i][j] < min:
-                min = Matrix[i][j]
-                pair = (i,j)
-    return pair
-
+    mask = np.where(np.eye(len(Matrix)), np.inf, Matrix)
+    min_index = np.unravel_index(np.argmin(mask), Matrix.shape)
+    return min_index
 
 def removeCluster(index: int, matrix):
-    matrix.pop(index)
-    for i in range(len(matrix)):
-        matrix[i].pop(index)
+    print(matrix.shape)
+    matrix = np.delete(matrix, index, axis=0)
+    matrix = np.delete(matrix, index, axis=1)
+    print("del", end="")
+    print(matrix.shape)
+    return matrix
 
-def addCluster(cluster, allClusters, matrix):
-    matrix.append([])
-    for i in range(len(allClusters)):
-        matrix[-1].append(clusterDistance(cluster, allClusters[i]))
-        matrix[i].append(clusterDistance(cluster, allClusters[i]))
-    matrix[-1].append(0)
+def addCluster(new_cluster, allClusters, Matrix):
+    allClusters.append(new_cluster)
+    size = len(allClusters)
+    print(size)
+    print(Matrix.shape)
+    new_dist = np.array([clusterDistance(new_cluster, nd) for nd in allClusters[:-1]])
+
+    Matrix = np.pad(Matrix, ((0, 1), (0, 1)), mode='constant', constant_values=0)
+    Matrix[-1, :-1] = new_dist
+    Matrix[:-1, -1] = new_dist
+    return Matrix
 
 
 def aggregate(allClusters, MTRX):
-    pair = findMinDist(Matrix=MTRX)
+    i, j = findMinDist(Matrix=MTRX)
 
     try:
-        new_c = Cluster.merge(allClusters[pair[0]], allClusters[pair[1]], 500)
+        new_c = Cluster.merge(allClusters[i], allClusters[j], 500)
     except OutOfBounds:
         return False
-    if pair[0] > pair[1]:
-        removeCluster(pair[0], MTRX)
-        removeCluster(pair[1], MTRX)
-        allClusters.pop(pair[0])
-        allClusters.pop(pair[1])
-    else:
-        removeCluster(pair[1], MTRX)
-        removeCluster(pair[0], MTRX)
-        allClusters.pop(pair[1])
-        allClusters.pop(pair[0])
+    if i > j:
+        i, j = j, i
+    MTRX = removeCluster(j, removeCluster(i, MTRX))
+    del allClusters[j]
+    del allClusters[i]
 
-    addCluster(new_c, allClusters, MTRX)
-    allClusters.append(new_c)
+    MTRX = addCluster(new_c, allClusters, MTRX)
     return True
 
 if __name__ == '__main__':
