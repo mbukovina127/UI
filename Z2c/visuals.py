@@ -1,8 +1,4 @@
-import time
-
 import matplotlib.pyplot as plt
-import numpy as np
-from cluster import Cluster
 
 def visualize(grid, TIME):
     x_axis = []
@@ -16,8 +12,8 @@ def visualize(grid, TIME):
         for squares in rows:
             for cluster in squares:
                 color_num += 1
-                centroids_x.append(cluster.centroid.x)
-                centroids_y.append(cluster.centroid.y)
+                centroids_x.append(cluster.center.x)
+                centroids_y.append(cluster.center.y)
 
                 for point in cluster.contents:
                     x_axis.append(point.x)
@@ -41,8 +37,8 @@ def visualizeList(list_of_grid, centroids):
     color_num = 0
     for cluster in list_of_grid:
         color_num += 1
-        centroids_x.append(cluster.centroid.x)
-        centroids_y.append(cluster.centroid.y)
+        centroids_x.append(cluster.center.x)
+        centroids_y.append(cluster.center.y)
 
         for point in cluster.contents:
             x_axis.append(point.x)
