@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     LIMIT = 500
     min, max = -5000, 5000
-    max_points = 20000
+    max_points = 2000
     offset_min, offset_max = -100, 100
 
     allClusters = []

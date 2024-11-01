@@ -4,40 +4,69 @@ from Z2c.point import clusterDistance
 
 class Matrix_C:
     def __init__(self, clusters, lmt):
+        self.map = list()
         self.clusters = clusters
-        self.matrix = self.makeMatrix()
         self.LIMIT = lmt
+        self.matrix = self.makeMatrix()
 
 
     def makeMatrix(self):
         self.matrix = [[0 for _ in range(len(self.clusters))] for _ in range(len(self.clusters))]
         for st in range(len(self.clusters)):
+            self.map.append(20000)
             for nd in range(len(self.clusters)):
-                self.matrix[st][nd] = clusterDistance(self.clusters[st], self.clusters[nd])
+                dst = clusterDistance(self.clusters[nd], self.clusters[st])
+                self.matrix[st][nd] = dst
+                if (dst < self.map[-1]) and dst > 0:
+                    self.map[-1] = dst
+
+
         return self.matrix
+
+    def recalculateMap(self, index):
+        min = 20000
+        for dst in self.matrix[index]:
+            if min > dst > 0:
+                min = dst
+                self.map[index] = min
+
 
     def findMinDist(self):
         min = 12000
-        pair = (0, 0)
-        for i in range(len(self.matrix)):
-            for j in range(i + 1, len(self.matrix)):
-                if self.matrix[i][j] < min:
-                    min = self.matrix[i][j]
-                    pair = (i, j)
-        return pair
+        index = -1
+        for min_row in range(len(self.matrix)):
+            if self.map[min_row] < min:
+                min = self.map[min_row]
+                index = min_row
+        for i,dist in enumerate(self.matrix[index]):
+            if dist == min:
+                return (index, i)
+        return False
 
     def removeCluster(self, index: int):
         del self.matrix[index]
-        for i in range(len(self.matrix)):
-            del self.matrix[i][index]
+        del self.map[index]
         del self.clusters[index]
+
+        for i in range(len(self.matrix)):
+            if self.map[i] == self.matrix[i].pop(index):
+                self.recalculateMap(i)
 
     def addCluster(self, cluster):
         self.matrix.append([])
+        self.map.append(0)
+        min_last = 20000
         for i in range(len(self.clusters)):
             dst = clusterDistance(cluster, self.clusters[i])
             self.matrix[-1].append(dst)
             self.matrix[i].append(dst)
+
+            if self.map[i] > dst > 0:
+                self.map[i] = dst
+            if min_last > dst > 0:
+                min_last = dst
+
+        self.map[-1] = min_last
         self.matrix[-1].append(0)
         self.clusters.append(cluster)
 
