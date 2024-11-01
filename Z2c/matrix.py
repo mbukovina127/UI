@@ -27,15 +27,17 @@ class Matrix_C:
         return pair
 
     def removeCluster(self, index: int):
-        self.matrix.pop(index)
+        del self.matrix[index]
         for i in range(len(self.matrix)):
-            self.matrix[i].pop(index)
+            del self.matrix[i][index]
+        del self.clusters[index]
 
     def addCluster(self, cluster):
         self.matrix.append([])
         for i in range(len(self.clusters)):
-            self.matrix[-1].append(clusterDistance(cluster, self.clusters[i]))
-            self.matrix[i].append(clusterDistance(cluster, self.clusters[i]))
+            dst = clusterDistance(cluster, self.clusters[i])
+            self.matrix[-1].append(dst)
+            self.matrix[i].append(dst)
         self.matrix[-1].append(0)
         self.clusters.append(cluster)
 
@@ -53,50 +55,13 @@ class Matrix_C:
 
         self.removeCluster(i)
         self.removeCluster(j)
-        self.clusters.pop(i)
-        self.clusters.pop(j)
 
         self.addCluster(new_c)
         return True
 
-class Matrix_M:
+class Matrix_M(Matrix_C):
     def __init__(self, clusters, lmt):
-        self.clusters = clusters
-        self.matrix = self.makeMatrix()
-        self.LIMIT = lmt
-
-    def makeMatrix(self):
-        self.matrix = [[0 for _ in range(len(self.clusters))] for _ in range(len(self.clusters))]
-        for i, st in enumerate(self.clusters):
-            for j, nd in enumerate(self.clusters):
-                self.matrix[i][j] = clusterDistance(st, nd)
-        return self.matrix
-
-    def findMinDist(self):
-        min = 12000
-        pair = (0, 0)
-        for i in range(len(self.matrix)):
-            for j in range(i + 1, len(self.matrix)):
-                if self.matrix[i][j] < min:
-                    min = self.matrix[i][j]
-                    pair = (i, j)
-        return pair
-
-    def removeCluster(self, index: int):
-        try:
-            self.matrix.pop(index)
-            for i in range(len(self.matrix)):
-                self.matrix[i].pop(index)
-        except IndexError:
-            print(index)
-
-    def addCluster(self, cluster):
-        self.matrix.append([])
-        for i in range(len(self.clusters)):
-            self.matrix[-1].append(clusterDistance(cluster, self.clusters[i]))
-            self.matrix[i].append(clusterDistance(cluster, self.clusters[i]))
-        self.matrix[-1].append(0)
-        self.clusters.append(cluster)
+        super().__init__(clusters,lmt)
 
     def aggregate(self):
         pair = self.findMinDist()
@@ -112,8 +77,6 @@ class Matrix_M:
 
         self.removeCluster(i)
         self.removeCluster(j)
-        self.clusters.pop(i)
-        self.clusters.pop(j)
 
         self.addCluster(new_c)
         return True

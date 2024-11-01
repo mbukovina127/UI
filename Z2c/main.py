@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     LIMIT = 500
     min, max = -5000, 5000
-    max_points = 5000
+    max_points = 20000
     offset_min, offset_max = -100, 100
 
     allClusters = []
@@ -26,8 +26,9 @@ if __name__ == '__main__':
         y = min -10
         while clamp(y, min, max):
             y = random.randint(min, max)
-        allClusters.append(Cluster_C(Point(x, y)))
-        # allClusters.append(Cluster_M(Point(x, y)))
+        ###cetroid/medoid
+        allClusters.append(Cluster_C((x,y)))
+        # allClusters.append(Cluster_M((x,y)))
 
     while (len(allClusters) <= max_points):
         p = random.choice(allClusters)
@@ -37,16 +38,14 @@ if __name__ == '__main__':
         y = min -10
         while clamp(y, min, max):
             y = (random.randint(offset_min, offset_max) + p.center.y)
-        n_p = Point(x, y)
-        ###centroid
+        n_p = (x,y)
+        ###centroid/medoid
         allClusters.append(Cluster_C(n_p))
-        ###medoid
         # allClusters.append(Cluster_M(n_p))
 
     print("Building Matrix")
-    ###centroid
+    ###centroid/medoid
     MTRX = Matrix_C(allClusters, LIMIT)
-    ###medoid
     # MTRX = Matrix_M(allClusters, LIMIT)
     print("Aggregate clustering ", end="")
     print("by centroids", end="")

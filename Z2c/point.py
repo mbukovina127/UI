@@ -1,5 +1,7 @@
 import math
 
+
+
 class Point:
     def __init__(self, x: int, y: int):
         self.x = x
@@ -15,5 +17,5 @@ def clusterDistance(p1, p2):
 
 def tupleDistance(tuple1, tuple2):
     return math.sqrt((tuple1[0] - tuple2[0]) ** 2 + (tuple1[1] - tuple2[1]) ** 2)
-
+    # return euclidean(tuple1, tuple2)
 
