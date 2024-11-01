@@ -1,11 +1,12 @@
-from Z2c.cluster_c import Cluster_C
+from Z2c.cluster import Cluster_C, Cluster_M
 from Z2c.point import clusterDistance
 
 
-class Matrix:
-    def __init__(self, clusters):
+class Matrix_C:
+    def __init__(self, clusters, lmt):
         self.clusters = clusters
         self.matrix = self.makeMatrix()
+        self.LIMIT = lmt
 
 
     def makeMatrix(self):
@@ -43,7 +44,7 @@ class Matrix:
 
         i,j = pair[0], pair[1]
 
-        new_c = Cluster_C.merge(self.clusters[i], self.clusters[j], 500)
+        new_c = Cluster_C.merge(self.clusters[i], self.clusters[j], self.LIMIT)
         if isinstance(new_c, bool):
             return new_c
 
@@ -59,9 +60,10 @@ class Matrix:
         return True
 
 class Matrix_M:
-    def __init__(self, clusters):
+    def __init__(self, clusters, lmt):
         self.clusters = clusters
         self.matrix = self.makeMatrix()
+        self.LIMIT = lmt
 
     def makeMatrix(self):
         self.matrix = [[0 for _ in range(len(self.clusters))] for _ in range(len(self.clusters))]
@@ -81,9 +83,12 @@ class Matrix_M:
         return pair
 
     def removeCluster(self, index: int):
-        self.matrix.pop(index)
-        for i in range(len(self.matrix)):
-            self.matrix[i].pop(index)
+        try:
+            self.matrix.pop(index)
+            for i in range(len(self.matrix)):
+                self.matrix[i].pop(index)
+        except IndexError:
+            print(index)
 
     def addCluster(self, cluster):
         self.matrix.append([])
@@ -98,7 +103,7 @@ class Matrix_M:
 
         i,j = pair[0], pair[1]
 
-        new_c = Cluster_C.merge(self.clusters[i], self.clusters[j], 500)
+        new_c = Cluster_M.merge(self.clusters[i], self.clusters[j], self.LIMIT)
         if isinstance(new_c, bool):
             return new_c
 

@@ -1,15 +1,15 @@
 import random
 
-from Z2c.matrix import Matrix
+from Z2c.matrix import Matrix_C, Matrix_M
 from Z2c.pltly import plotScatter
-from cluster_c import Cluster_C
+from cluster import Cluster_C, Cluster_M
 from point import Point
 
 
 def clamp(value, minimum, maximum):
     if (value < minimum) or (value > maximum):
         return True
-    return value
+    return False
 
 if __name__ == '__main__':
 
@@ -18,21 +18,38 @@ if __name__ == '__main__':
     max_points = 5000
     offset_min, offset_max = -100, 100
 
-    allClusters = [Cluster_C(Point(clamp(random.randint(min, max), min, max), clamp(random.randint(min, max), min, max))) for _ in range(20)]
+    allClusters = []
+    while (len(allClusters) <= 20):
+        x = min -10
+        while clamp(x, min, max):
+            x = random.randint(min, max)
+        y = min -10
+        while clamp(y, min, max):
+            y = random.randint(min, max)
+        allClusters.append(Cluster_C(Point(x, y)))
+        # allClusters.append(Cluster_M(Point(x, y)))
 
     while (len(allClusters) <= max_points):
         p = random.choice(allClusters)
-        x = min -1
+        x = min -10
         while clamp(x, min, max):
             x = (random.randint(offset_min, offset_max) + p.center.x)
-        y = min -1
+        y = min -10
         while clamp(y, min, max):
             y = (random.randint(offset_min, offset_max) + p.center.y)
         n_p = Point(x, y)
+        ###centroid
         allClusters.append(Cluster_C(n_p))
+        ###medoid
+        # allClusters.append(Cluster_M(n_p))
 
     print("Building Matrix")
-    MTRX = Matrix(allClusters)
-    print("Aggregate clusterring", end="")
+    ###centroid
+    MTRX = Matrix_C(allClusters, LIMIT)
+    ###medoid
+    # MTRX = Matrix_M(allClusters, LIMIT)
+    print("Aggregate clustering ", end="")
+    print("by centroids", end="")
+    # print("by medoids", end="")
     while MTRX.aggregate(): print(".", end="")
     plotScatter(MTRX.clusters)
