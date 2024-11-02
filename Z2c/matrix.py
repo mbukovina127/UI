@@ -82,10 +82,11 @@ class Matrix_C:
         if i < j:
             i, j = j, i
 
+        self.addCluster(new_c)
+
         self.removeCluster(i)
         self.removeCluster(j)
 
-        self.addCluster(new_c)
         return True
 
 class Matrix_M(Matrix_C):

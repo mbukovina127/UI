@@ -51,7 +51,7 @@ def plotScatter(list_of_clusters):
     ))
 
     # Update layout
-    fig.update_layout(title="Aglomerativne klustrovanie / centroidy",
+    fig.update_layout(title="Aglomerativne klustrovanie / centroid",
                       xaxis_title='X axis',
                       yaxis_title='Y axis')
 

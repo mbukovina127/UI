@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     LIMIT = 500
     min, max = -5000, 5000
-    max_points = 2000
+    max_points = 20_000
     offset_min, offset_max = -100, 100
 
     allClusters = []
@@ -27,10 +27,10 @@ if __name__ == '__main__':
         while clamp(y, min, max):
             y = random.randint(min, max)
         ###cetroid/medoid
-        allClusters.append(Cluster_C((x,y)))
-        # allClusters.append(Cluster_M((x,y)))
+        # allClusters.append(Cluster_C((x,y)))
+        allClusters.append(Cluster_M((x,y)))
 
-    while (len(allClusters) <= max_points):
+    while (len(allClusters) <= (max_points - 20)):
         p = random.choice(allClusters)
         x = min -10
         while clamp(x, min, max):

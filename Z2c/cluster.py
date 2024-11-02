@@ -44,7 +44,6 @@ class Cluster_C:
     def merge(cl1: 'Cluster_C', cl2: 'Cluster_C', limit: int):
         new_set = cl1.contents | cl2.contents
         new_c = Cluster_C(new_set)
-        new_c.calculateCenter()
 
         if (not new_c.checkCriterion(new_c, limit)):
             return False
@@ -69,10 +68,9 @@ class Cluster_M(Cluster_C):
                 min_point = st_tp
         self.center = Point(min_point[0], min_point[1])
 
-    def merge(cl1: 'Cluster_C', cl2: 'Cluster_C', limit: int):
+    def merge(cl1: 'Cluster_M', cl2: 'Cluster_M', limit: int):
         new_set = cl1.contents | cl2.contents
         new_c = Cluster_C(new_set)
-        new_c.calculateCenter()
 
         if (not new_c.checkCriterion(new_c, limit)):
             return False
