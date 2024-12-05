@@ -15,10 +15,11 @@ if __name__ == '__main__':
 
     LIMIT = 500
     min, max = -5000, 5000
-    max_points = 20_000
+    max_points = 3_000
     offset_min, offset_max = -100, 100
 
     allClusters = []
+    # vytvorenie prvych 20 bodov
     while (len(allClusters) <= 20):
         x = min -10
         while clamp(x, min, max):
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         # allClusters.append(Cluster_C((x,y)))
         allClusters.append(Cluster_M((x,y)))
 
+    # vytvorenie zvysnych bodov
     while (len(allClusters) <= (max_points - 20)):
         p = random.choice(allClusters)
         x = min -10
@@ -42,6 +44,7 @@ if __name__ == '__main__':
         ###centroid/medoid
         allClusters.append(Cluster_C(n_p))
         # allClusters.append(Cluster_M(n_p))
+
 
     print("Building Matrix")
     ###centroid/medoid

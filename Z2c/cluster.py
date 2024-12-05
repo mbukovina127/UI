@@ -42,6 +42,7 @@ class Cluster_C:
         return True
 
     def merge(cl1: 'Cluster_C', cl2: 'Cluster_C', limit: int):
+        # zlucenie setov
         new_set = cl1.contents | cl2.contents
         new_c = Cluster_C(new_set)
 
