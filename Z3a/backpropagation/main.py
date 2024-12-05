@@ -7,7 +7,7 @@ from Z3a.backpropagation.model import Model, MSELoss
 if __name__ == '__main__':
     # XOR dataset
     X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y = np.array([[0], [0], [0], [1]])
+    y = np.array([[0], [1], [1], [0]])
 
     # Model definícia
     layers = [
@@ -18,22 +18,22 @@ if __name__ == '__main__':
     ]
 
     model = Model(layers)
-    loss_fn = MSELoss()
+    loss_function = MSELoss()
 
     # Parametre tréningu
-    lr = 0.1
-    epochs = 1500
+    lr = 0.3
+    epochs = 3000
     losses = []
 
     # Tréning
     for epoch in range(epochs):
         # Forward
         output = model.forward(X)
-        loss = loss_fn.forward(output, y)
+        loss = loss_function.forward(output, y)
         losses.append(loss)
 
         # Backward
-        loss_grad = loss_fn.backward()
+        loss_grad = loss_function.backward()
         model.backward(loss_grad)
 
         # Update
@@ -49,5 +49,6 @@ if __name__ == '__main__':
     plt.plot(losses)
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
+    plt.xscale('linear')
     plt.title('Training Loss')
     plt.show()
