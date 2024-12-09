@@ -2,12 +2,16 @@ import numpy as np
 
 # Lineárna vrstva
 class Linear:
-    def __init__(self, input_size, output_size):
-        self.weights = np.random.randn(input_size, output_size) * 0.1
+    def __init__(self, input_size, output_size, momentum=0.0):
+        limit = np.sqrt(6 / (input_size + output_size))
+        self.weights = np.random.uniform(-limit, limit, (input_size, output_size))
         self.bias = np.zeros((1, output_size))
         self.input = None
         self.grad_weights = None
         self.grad_bias = None
+        self.velocity_weights = np.zeros_like(self.weights)
+        self.velocity_bias = np.zeros_like(self.bias)
+        self.momentum = momentum
 
     def forward(self, x):
         self.input = x
@@ -19,8 +23,17 @@ class Linear:
         return np.dot(grad_output, self.weights.T)
 
     def update(self, lr):
-        self.weights -= lr * self.grad_weights
-        self.bias -= lr * self.grad_bias
+        if self.momentum > 0:
+            # Update with momentum
+            self.velocity_weights = self.momentum * self.velocity_weights - lr * self.grad_weights
+            self.velocity_bias = self.momentum * self.velocity_bias - lr * self.grad_bias
+            self.weights += self.velocity_weights
+            self.bias += self.velocity_bias
+        else:
+            # Vanilla gradient descent
+            self.weights -= lr * self.grad_weights
+            self.bias -= lr * self.grad_bias
+
 
 # Aktivácie
 class Sigmoid:

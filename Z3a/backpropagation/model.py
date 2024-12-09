@@ -21,7 +21,7 @@ class Model:
             if isinstance(layer, Linear):
                 layer.update(lr)
 
-class MSELoss:
+class Loss:
     def forward(self, predicted, target):
         self.error = predicted - target
         return np.mean(self.error ** 2)

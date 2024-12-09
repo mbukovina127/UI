@@ -2,27 +2,30 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from Z3a.backpropagation.linear import Linear, Tanh, Sigmoid
-from Z3a.backpropagation.model import Model, MSELoss
+from Z3a.backpropagation.model import Model, Loss
 
 if __name__ == '__main__':
     # XOR dataset
-    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    X = np.array([[0, 1], [0, 0], [1, 0], [1, 1]])
     y = np.array([[0], [1], [1], [0]])
 
     # Model definícia
+    momentum = 0.0
     layers = [
-        Linear(2, 4),
+        Linear(2, 4, momentum),
         Tanh(),
-        Linear(4, 1),
+        # Linear(4, 4, momentum),
+        # Tanh(),
+        Linear(4, 1, momentum),
         Sigmoid()
     ]
 
     model = Model(layers)
-    loss_function = MSELoss()
+    loss_function = Loss()
 
     # Parametre tréningu
-    lr = 0.3
-    epochs = 3000
+    lr = 0.1
+    epochs = 500
     losses = []
 
     # Tréning
@@ -50,5 +53,5 @@ if __name__ == '__main__':
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.xscale('linear')
-    plt.title('Training Loss')
+    plt.title(f"Training Loss    mom:{momentum:.2}    lrn.r:{lr:.2}")
     plt.show()

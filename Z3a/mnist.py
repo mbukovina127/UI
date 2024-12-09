@@ -12,8 +12,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Transformácie a načítanie datasetu
 transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))  # Normalizácia do rozsahu [-1, 1]
+    transforms.ToTensor()
 ])
 
 train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
