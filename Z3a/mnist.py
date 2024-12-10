@@ -12,7 +12,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Transformácie a načítanie datasetu
 transform = transforms.Compose([
-    transforms.ToTensor()
+    transforms.ToTensor(),
+    transforms.Normalize((0.1307,), (0.3081,))
 ])
 
 train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
@@ -127,7 +128,7 @@ def evaluate_model(model):
 
 
 # Spustenie experimentov
-num_epochs = 20
+num_epochs = 5
 criterion = nn.CrossEntropyLoss()
 
 # SGD
@@ -140,8 +141,7 @@ evaluate_model(model_sgd)
 # SGD with Momentum
 model_momentum = MLP()
 optimizer_momentum = optim.SGD(model_momentum.parameters(), lr=0.01, momentum=0.9)
-train_losses_momentum, test_losses_momentum, accuracies_momentum = train_model(model_momentum, optimizer_momentum,
-                                                                               criterion, num_epochs)
+train_losses_momentum, test_losses_momentum, accuracies_momentum = train_model(model_momentum, optimizer_momentum, criterion, num_epochs)
 plot_metrics(train_losses_momentum, test_losses_momentum, accuracies_momentum, "SGD with Momentum")
 evaluate_model(model_momentum)
 

@@ -7,15 +7,15 @@ from Z3a.backpropagation.model import Model, Loss
 if __name__ == '__main__':
     # XOR dataset
     X = np.array([[0, 1], [0, 0], [1, 0], [1, 1]])
-    y = np.array([[0], [1], [1], [0]])
+    y = np.array([[0], [0], [0], [1]])
 
     # Model definícia
-    momentum = 0.0
+    momentum = 0.9
     layers = [
         Linear(2, 4, momentum),
         Tanh(),
-        # Linear(4, 4, momentum),
-        # Tanh(),
+        Linear(4, 4, momentum),
+        Tanh(),
         Linear(4, 1, momentum),
         Sigmoid()
     ]
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     loss_function = Loss()
 
     # Parametre tréningu
-    lr = 0.1
+    lr = 0.05
     epochs = 500
     losses = []
 
