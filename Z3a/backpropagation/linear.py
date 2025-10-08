@@ -9,8 +9,8 @@ class Linear:
         self.input = None
         self.grad_weights = None
         self.grad_bias = None
-        self.velocity_weights = np.zeros_like(self.weights)
-        self.velocity_bias = np.zeros_like(self.bias)
+        self.v_weights = np.zeros_like(self.weights)
+        self.v_bias = np.zeros_like(self.bias)
         self.momentum = momentum
 
     def forward(self, x):
@@ -25,10 +25,10 @@ class Linear:
     def update(self, lr):
         if self.momentum > 0:
             # Update with momentum
-            self.velocity_weights = self.momentum * self.velocity_weights - lr * self.grad_weights
-            self.velocity_bias = self.momentum * self.velocity_bias - lr * self.grad_bias
-            self.weights += self.velocity_weights
-            self.bias += self.velocity_bias
+            self.v_weights = self.momentum * self.v_weights - lr * self.grad_weights
+            self.v_bias = self.momentum * self.v_bias - lr * self.grad_bias
+            self.weights += self.v_weights
+            self.bias += self.v_bias
         else:
             # Vanilla gradient descent
             self.weights -= lr * self.grad_weights

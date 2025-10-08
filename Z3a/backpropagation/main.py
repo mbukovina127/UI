@@ -10,12 +10,12 @@ if __name__ == '__main__':
     y = np.array([[0], [0], [0], [1]])
 
     # Model definícia
-    momentum = 0.9
+    momentum = 0.0
     layers = [
         Linear(2, 4, momentum),
         Tanh(),
-        Linear(4, 4, momentum),
-        Tanh(),
+        # Linear(4, 4, momentum),
+        # Tanh(),
         Linear(4, 1, momentum),
         Sigmoid()
     ]
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     loss_function = Loss()
 
     # Parametre tréningu
-    lr = 0.05
+    lr = 0.1
     epochs = 500
     losses = []
 
