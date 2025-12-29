@@ -1,8 +1,5 @@
 import random
 
-from fontTools.designspaceLib.types import clamp
-
-import salesperson
 from salesperson import Salesperson
 
 

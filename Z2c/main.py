@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     LIMIT = 500
     min, max = -5000, 5000
-    max_points = 3_000
+    max_points = 6_000
     offset_min, offset_max = -100, 100
 
     allClusters = []
@@ -53,5 +53,11 @@ if __name__ == '__main__':
     print("Aggregate clustering ", end="")
     print("by centroids", end="")
     # print("by medoids", end="")
-    while MTRX.aggregate(): print(".", end="")
+    i = 0
+    while MTRX.aggregate():
+        i += 1
+        print(".", end="")
+        if i > 2:
+            print("\033[3D", end="")
+            i = 0
     plotScatter(MTRX.clusters)
