@@ -121,29 +121,92 @@ MTRX = Matrix_M(allClusters, LIMIT)
   - Black 'x' markers indicating cluster centers
   - Cluster count and spatial distribution
 
-## Assignment 3: Handwritten Digit Classification with Neural Networks (Z3a)
+## Assignment 3: Neural Networks and Backpropagation (Z3a)
 
 ### Topic
 
-**Supervised learning** using **deep neural networks**.
+**Supervised learning** using **deep neural networks** with custom backpropagation implementation and production frameworks.
 
 ### Description
 
-This assignment trains a neural network to classify handwritten digits from the **MNIST dataset**. MNIST is a standard benchmark dataset containing grayscale images of digits (0–9).
+This assignment explores neural network fundamentals through two complementary implementations. The first part demonstrates **backpropagation from scratch** using NumPy on the XOR problem, implementing forward pass, backward pass, and gradient descent manually. The second part applies modern deep learning techniques to classify handwritten digits from the **MNIST dataset** using PyTorch, comparing different optimization strategies.
 
 Key concepts demonstrated:
 
-* Dataset preprocessing and normalization
-* Neural network training
-* Model evaluation and accuracy measurement
-* Use of GPU-accelerated frameworks
+* Manual implementation of forward and backward propagation
+* Gradient descent with momentum optimization
+* Activation functions (Sigmoid, Tanh, ReLU)
+* Multi-layer perceptron architecture
+* Batch training and evaluation
+* Optimizer comparison (SGD, SGD with Momentum, Adam)
+* Model evaluation with confusion matrices
 
 ### Key Files
 
-* `Z3a/mnist.py` – Dataset loading, model definition, training loop
+**Backpropagation Implementation:**
+* `backpropagation/linear.py` — Custom Linear layer, activation functions (Sigmoid, Tanh, ReLU)
+* `backpropagation/model.py` — Model container and MSE loss implementation
+* `backpropagation/main.py` — XOR problem training with custom neural network
+
+**MNIST Classification:**
+* `mnist.py` — Complete MNIST training pipeline with optimizer comparison
+
+### Experiments
+
+**Part 1: XOR Problem (Custom Implementation)**
+
+Trains a simple MLP to solve the XOR logical function using manually implemented backpropagation. Demonstrates the necessity of non-linear activation functions for solving non-linearly separable problems.
+
+Network architecture:
+* Input layer: 2 neurons
+* Hidden layer: 4 neurons with Tanh activation
+* Output layer: 1 neuron with Sigmoid activation
+
+**Part 2: MNIST Classification (PyTorch)**
+
+Compares three optimization strategies on handwritten digit classification:
+
+1. **Vanilla SGD** — Basic stochastic gradient descent
+2. **SGD with Momentum** — Accelerated convergence with momentum (β = 0.9)
+3. **Adam** — Adaptive learning rate optimization
+
+Network architecture:
+* Input: 784 features (28×28 flattened images)
+* Hidden layer 1: 128 neurons with ReLU
+* Hidden layer 2: 64 neurons with ReLU
+* Output: 10 classes (digits 0-9)
+
+### Parameters
+
+**XOR Training:**
+* Learning rate: 0.1
+* Epochs: 500
+* Momentum: 0.0 (configurable)
+
+**MNIST Training:**
+* Batch size: 64
+* Epochs: 5
+* Learning rates: 0.01 (SGD), 0.001 (Adam)
+* Momentum: 0.9 (for SGD with momentum)
 
 ### Libraries Used
 
-* `torch` – Core deep learning framework
-* `torchvision` – Dataset utilities and transforms
+* `numpy` — Numerical computations for custom backpropagation
+* `torch` — PyTorch deep learning framework
+* `torchvision` — MNIST dataset and transformations
+* `matplotlib` — Training curves and loss visualization
+* `sklearn` — Confusion matrix generation
+
+### Expected Output
+
+**XOR Problem:**
+* Training loss curve over 500 epochs
+* Final predictions for all XOR input combinations
+* Demonstration of successful non-linear function approximation
+
+**MNIST Classification:**
+* Training and test loss curves for each optimizer
+* Accuracy progression over epochs
+* Confusion matrices showing per-digit classification performance
+* Comparative analysis of optimizer effectiveness (typically Adam > SGD+Momentum > Vanilla SGD)
 
